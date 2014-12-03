@@ -1,15 +1,11 @@
 LNP-shared-core
 ===============
 
-Components of the Dwarf Fortress LNP that can be used on any OS.
+Components of the Dwarf Fortress LNP that can be used on any OS.  Contributions, feedback, and reuse all welcome.
 
 The goal of this project is to create a canonical common base for different versions of the Lazy Newb Pack, across whatever platform or variant a user or pack maintainer feels like.  It assumes that the pack is based on the [PyLNP launcher]() or an equivalent, and content is currently targeted at DF v0.40.16
 
 It consists of alternative color schemes, standard 'newb friendly' default settings, an embark profile collection, keybindings (alternative control schemes), and miscellaneous "extras" to install.  
-
-As a work in progress, be aware that it's not finished yet and may have odd or conflicting settings!
-
-Contributions, feedback, and reuse all welcome.
 
 TODO:  continue documenting sources of components.
 
@@ -30,7 +26,7 @@ The default profiles are sourced from [an appeal on Reddit]().  The starting sce
 
 `LNP/extras`
 ------------
-The extras folder is copied into the DF install the first time the launcher is run.  The `/data/init` section installs the default init settings and keybinds.  The `/hack/scripts` section adds some dfhack scripts by Putnam and Lethosor:  [gaydar](https://gist.github.com/Putnam3145/77492ae79ca54fbf8af3), [adv-max-skills, embark-skills, load-screen, manager-quantity, settings-manager, and title-version](https://github.com/lethosor/dfhack-scripts).
+The extras folder is copied into the DF install the first time the launcher is run.  The `/data/init` section installs the default init settings and keybinds.  The `/hack/scripts` section adds some dfhack scripts by Lethosor which are not yet included in standard DFHack:  [adv-max-skills, embark-skills, load-screen, manager-quantity, settings-manager, and title-version](https://github.com/lethosor/dfhack-scripts).
 
 `LNP/keybinds`
 --------------
