@@ -4,8 +4,10 @@ Sample usage:
     keybinding add Alt-S@title settings-manager
     keybinding add Alt-S@dwarfmode/Default settings-manager
 
-Last tested on 0.40.11-r1
+Last tested on 0.40.13-r1
 ]]
+
+VERSION = '0.5.2'
 
 local gui = require "gui"
 local dialog = require 'gui.dialogs'
@@ -46,12 +48,23 @@ function font_exists(font)
     end
 end
 
--- Validation, used in NICKNAME_DWARF, NICKNAME_ADVENTURE, and NICKNAME_LEGENDS
+-- Used in NICKNAME_DWARF, NICKNAME_ADVENTURE, and NICKNAME_LEGENDS
 local nickname_choices = {
     {'REPLACE_FIRST', 'Replace first name'},
     {'CENTRALIZE', 'Display between first and last name'},
     {'REPLACE_ALL', 'Replace entire name'}
 }
+
+-- Used in PRINT_MODE
+local print_modes = {
+    {'2D', '2D (default)'}, {'2DSW', '2DSW'}, {'2DASYNC', '2DASYNC'},
+    {'STANDARD', 'STANDARD (OpenGL)'}, {'PROMPT', 'Prompt (STANDARD/2D)'},
+    {'ACCUM_BUFFER', 'ACCUM_BUFFER'}, {'FRAME_BUFFER', 'FRAME_BUFFER'}, {'VBO', 'VBO'}
+}
+if dfhack.getOSType() == 'linux' then
+    table.insert(print_modes, {'TEXT', 'TEXT (ncurses)'})
+end
+
 --[[
 Setting descriptions
 
@@ -110,11 +123,7 @@ SETTINGS = {
         {id = 'GRAPHICS_FULLSCREENY', type = 'int', desc = '>>Fullscreen Y dimension (rows)', min = 0},
         {id = 'GRAPHICS_FULLFONT', type = 'string', desc = '>>Font (fullscreen)', validate = font_exists},
 
-        {id = 'PRINT_MODE', type = 'select', desc = 'Print mode', choices = {
-            {'2D', '2D (default)'}, {'2DSW', '2DSW'}, {'2DASYNC', '2DASYNC'},
-            {'STANDARD', 'STANDARD (OpenGL)'}, {'ACCUM_BUFFER', 'ACCUM_BUFFER'},
-            {'FRAME_BUFFER', 'FRAME_BUFFER'}, {'VBO', 'VBO'}
-        }},
+        {id = 'PRINT_MODE', type = 'select', desc = 'Print mode', choices = print_modes},
         {id = 'SINGLE_BUFFER', type = 'bool', desc = '>>Single-buffer'},
         {id = 'ARB_SYNC', type = 'bool', desc = '>>Enable ARB_sync (unstable)'},
         {id = 'VSYNC', type = 'bool', desc = '>>Enable vertical synchronization'},
@@ -145,8 +154,10 @@ SETTINGS = {
         {id = 'KEY_HOLD_MS', type = 'int', desc = 'Key repeat delay (ms)'},
         {id = 'KEY_REPEAT_ACCEL_LIMIT', type = 'int', desc = '>>Maximum key acceleration (multiple)', min = 1},
         {id = 'KEY_REPEAT_ACCEL_START', type = 'int', desc = '>>Key acceleration delay', min = 1},
-        {id = 'MACRO_MS', type = 'int', desc = 'Macro instruction delay (ms)', min = 0},
-        {id = 'RECENTER_INTERFACE_SHUTDOWN_MS', type = 'int', desc = 'Delay after recentering (ms)', min = 0},
+        {id = 'MACRO_MS', type = 'int', desc = 'Macro instruction delay (ms)', min = 0,
+            in_game = 'df.global.init.input.macro_time'},
+        {id = 'RECENTER_INTERFACE_SHUTDOWN_MS', type = 'int', desc = 'Delay after recentering (ms)', min = 0,
+            in_game = 'df.global.init.input.pause_zoom_no_interface_ms'},
 
         {id = 'COMPRESSED_SAVES', type = 'bool', desc = 'Enable compressed saves'},
     },
@@ -198,8 +209,10 @@ SETTINGS = {
             {'NO', 'Symbols (' .. string.char(247) .. ')'}, {'YES', 'Numbers (1-7)'}
         }},
         {id = 'SHOW_ALL_HISTORY_IN_DWARF_MODE', type = 'bool', desc = 'Show all history (fortress mode)'},
-        {id = 'DISPLAY_LENGTH', type = 'int', desc = 'Announcement display length (adv mode)', min = 1},
-        {id = 'MORE', type = 'bool', desc = '>>"More" indicator'},
+        {id = 'DISPLAY_LENGTH', type = 'int', desc = 'Announcement display length (adv mode)', min = 1,
+            in_game = 'df.global.d_init.display_length'},
+        {id = 'MORE', type = 'bool', desc = '>>"More" indicator',
+            in_game = 'df.global.d_init.flags2.MORE'},
         {id = 'ADVENTURER_TRAPS', type = 'bool', desc = 'Enable traps in adventure mode'},
         {id = 'ADVENTURER_ALWAYS_CENTER', type = 'bool', desc = 'Center screen on adventurer'},
         {id = 'NICKNAME_DWARF', type = 'select', desc = 'Nickname behavior (fortress mode)', choices = nickname_choices},
@@ -259,6 +272,7 @@ function dialog.showValidationError(str)
 end
 
 settings_manager = defclass(settings_manager, gui.FramedScreen)
+settings_manager.focus_path = 'settings_manager'
 
 function settings_manager:reset()
     self.frame_title = "Settings"
@@ -287,6 +301,11 @@ function settings_manager:init()
                     {key = 'LEAVESCREEN', text = ': Back'}
                 },
                 frame = {l = 1, t = 6},
+            },
+            widgets.Label{
+                text = 'settings-manager v' .. VERSION,
+                frame = {l = 1, b = 0},
+                text_pen = {fg = COLOR_GREY},
             },
         },
     }
@@ -516,7 +535,7 @@ function settings_manager:save_setting(value)
     self:refresh_settings_list()
 end
 
-if dfhack.gui.getCurFocus() == 'dfhack/lua' then
+if dfhack.gui.getCurFocus() == 'dfhack/lua/settings_manager' then
     dfhack.screen.dismiss(dfhack.gui.getCurViewscreen())
 end
 settings_manager():show()

@@ -1,9 +1,18 @@
 -- A replacement for the "load game" screen
 --[[ By Lethosor
 Usage: `load-screen enable` to enable, `load-screen disable` to disable
-Last tested on 0.40.11-r1
+Last tested on 0.40.13-r1
 ]]
+VERSION = '0.8.2'
 
+function usage()
+    print([[Usage:
+    load-screen enable:    Enable load-screen
+    load-screen disable:   Disable load-screen
+    load-screen version:   Show version information
+    load-screen [help]:    Show this help
+]])
+end
 
 local gui = require 'gui'
 local dialog = require 'gui.dialogs'
@@ -24,8 +33,8 @@ end
 function paintKeyString(x, y, key, str, opts)
     opts = opts or {}
     key_str = gui.getKeyDisplay(df.interface_key[key])
-    paintString({ch=' ', fg=opts.key_color or COLOR_LIGHTRED}, x, y, key_str)
-    paintString({ch=' ', fg=COLOR_WHITE}, x + #key_str, y, ": " .. str)
+    paintString(opts.key_color or COLOR_LIGHTRED, x, y, key_str)
+    paintString(COLOR_WHITE, x + #key_str, y, ": " .. str)
 end
 
 function gametypeString(gametype, overrides)
@@ -80,9 +89,11 @@ end
 --end
 
 load_screen = defclass(load_screen, gui.Screen)
+load_screen.focus_path = 'load_screen'
 
 function load_screen:init()
     self.saves = nil
+    self.backup_opts = {[0] = "No backups", "Backups visible", "Backups only"}
     self.old_fps = df.global.gps.display_frames
     df.global.gps.display_frames = 0
     self:reset()
@@ -91,7 +102,7 @@ end
 function load_screen:reset()
     self.sel_idx = 1
     self.opts = {
-        backups = false,
+        backups = 0,
         filter = '',
         filter_mode = df.game_type.NONE,
     }
@@ -99,14 +110,10 @@ function load_screen:reset()
 end
 
 function load_screen:is_backup(folder_name)
-    parts = folder_name:split('-')
-    if #parts >= 3 and
-        (string.find('spr,sum,aut,win', parts[#parts - 1])) and
-        (parts[#parts]:match('^%d+$')) then
+    if folder_name:match('%-%d%d%d%d%d%-%d%d%-%d%d$') ~= nil then
         return true
-    else
-        return false
     end
+    return false
 end
 
 function load_screen:init_saves()
@@ -122,7 +129,8 @@ function load_screen:get_saves()
     saves = {}
     for i = 1, #self.saves do
         save = self.saves[i]
-        if (self:is_backup(save.folder_name) and not self.opts.backups) or
+        if (self:is_backup(save.folder_name) and self.opts.backups == 0) or
+            (not self:is_backup(save.folder_name) and self.opts.backups == 2) or
             (#self.opts.filter and not save.folder_name:lower():find(self.opts.filter:lower())) or
             (self.opts.filter_mode ~= df.game_type.NONE and self.opts.filter_mode ~= save.game_type) then
             --pass
@@ -190,6 +198,7 @@ function load_screen:onRender()
     local cols, rows = dfhack.screen.getWindowSize()
     local min, max = self:visible_save_bounds()
     paintStringCenter(pen, 0, "Load game (DFHack)")
+    paintString(pen, cols - #VERSION - 3, 0, "v" .. VERSION)
     y = 0
     max_x = 77
     for i = min, max do
@@ -227,14 +236,18 @@ function load_screen:onRender()
     if self.search_active then
         paintKeyString(1, rows - 1, 'CUSTOM_S', label, {key_color = COLOR_RED})
         x = keyStringLength('CUSTOM_S', label) + 1
-        paintString({ch=' ', fg=COLOR_LIGHTGREEN}, x, rows - 1, '_')
+        paintString(COLOR_LIGHTGREEN, x, rows - 1, '_')
     else
         paintKeyString(1, rows - 1, 'CUSTOM_S', #label > 0 and label or "Search")
     end
     paintKeyString(27, rows - 1, 'CUSTOM_T', gametypeString(self.opts.filter_mode, {NONE = "Any mode"}))
+    paintKeyString(52, rows - 1, 'CUSTOM_B', self.backup_opts[self.opts.backups])
 end
 
 function load_screen:onInput(keys)
+    if keys._MOUSE_L then
+        return self:onMouseInput(df.global.gps.mouse_x, df.global.gps.mouse_y)
+    end
     if self.search_active then
         if keys.LEAVESCREEN then
             self.search_active = false
@@ -268,13 +281,30 @@ function load_screen:onInput(keys)
     elseif keys.STANDARDSCROLL_PAGEUP then
         self:scroll(-self:visible_save_count())
     elseif keys.CUSTOM_B then
-        self.opts.backups = not self.opts.backups
+        self.opts.backups = self.opts.backups + 1
+        if self.opts.backups > 2 then self.opts.backups = 0 end
     elseif keys.CUSTOM_S then
         self.search_active = true
     elseif keys.CUSTOM_T then
         self.opts.filter_mode = df.game_type[gametypeMap[df.game_type[self.opts.filter_mode]]]
     elseif keys.CUSTOM_ALT_C then
         self:reset()
+    end
+end
+
+function load_screen:onMouseInput(x, y)
+    local cols, rows = dfhack.screen.getWindowSize()
+    if y == rows - 1 then
+        if x <= 26 then
+            self.search_active = true
+        else
+            self.search_active = false
+            if x <= 51 then
+                self:onInput({CUSTOM_T = true})
+            else
+                self:onInput({CUSTOM_B = true})
+            end
+        end
     end
 end
 
@@ -411,7 +441,7 @@ end
 function load_screen_options:do_copy(new_folder)
     ok, old_path, new_path = self:validate_folders(self.save.folder_name, new_folder)
     if not ok then return false end
-
+    dialog.showError('Not implemented')
 end
 
 function load_screen_options:display(parent, save)
@@ -426,7 +456,8 @@ function init()
     prev_focus = ''
     dfhack.onStateChange.load_screen = function()
         cur_focus = dfhack.gui.getCurFocus()
-        if cur_focus == 'loadgame' and prev_focus ~= 'dfhack/lua' and prev_focus ~= 'loadgame' and enabled then
+        if cur_focus == 'loadgame' and prev_focus ~= 'dfhack/lua/load_screen'
+            and prev_focus ~= 'loadgame' and enabled then
             load_screen():show()
         end
         prev_focus = cur_focus
@@ -438,12 +469,19 @@ if initialized == nil then
     end
     init()
     initialized = true
-    enabled = true
+    enabled = false
 end
 
 args = {...}
 if #args == 1 then
-    if args[1] == 'enable' then enabled = true
+    if args[1] == 'enable' then
+        enabled = true
+        if dfhack.gui.getCurFocus() == 'loadgame' then
+            load_screen():show()
+        end
     elseif args[1] == 'disable' then enabled = false
+    elseif args[1] == 'version' then print('load-screen version ' .. VERSION)
+    else usage()
     end
+else usage()
 end
