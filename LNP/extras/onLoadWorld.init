@@ -1,0 +1,7 @@
+# The contents of this file are executed as DFHack commands
+# when a world is loaded - good for bugfixes and other options
+
+# Run the commands written by the dfhack tab
+script PyLNP_dfhack_onLoad.init
+
+#Add your own commands below here!...
