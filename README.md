@@ -20,7 +20,7 @@ Default settings to revert to.  The embarks are an install of `default_embarks.t
 
 `LNP/embarks`
 -------------
-The default profiles are sourced from [an appeal on Reddit]().  The starting scenarios are adapted from Masterwork Mod (for 34.11).  The advanced profiles are scraped [from the wiki](http://dwarffortresswiki.org/index.php/DF2014:Embark_profile_repository) [2](http://dwarffortresswiki.org/index.php/DF2014:Sample_Starting_Builds).  The tutorial profiles are from CaptnDuck and Mayday.  
+The default profiles are sourced from [an appeal on Reddit](http://redd.it/2ew1fa).  The starting scenarios are adapted from Masterwork Mod (for 34.11).  The advanced profiles are scraped [from the wiki](http://dwarffortresswiki.org/index.php/DF2014:Embark_profile_repository) [2](http://dwarffortresswiki.org/index.php/DF2014:Sample_Starting_Builds).  The tutorial profiles are from CaptnDuck and Mayday.  
 
 `LNP/extras`
 ------------
@@ -29,3 +29,7 @@ The extras folder is copied into the DF install the first time the launcher is r
 `LNP/keybinds`
 --------------
 The vanilla keybinds are copied from DF `0.40.23`.  The Classic LNP keybinds are adapted for laptop keyboards; PeridexisErrant ported the changes to a new version (from the discontinued Windows LNP).  The PeridexisErrant keybindings are additionally optimised for use with the mouse, eg with dfhack's mousequery plugin.
+
+`LNP/tilesets`
+--------------
+Some tilesets are from vanilla DF.  Fircy generated many more with mifki's [tileset generator](http://www.bay12forums.com/smf/index.php?topic=140250).  `curses_24x24.png` is by [/u/dragonplatino](http://redd.it/2r8gtx).
