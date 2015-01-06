@@ -3,11 +3,9 @@ LNP-shared-core
 
 Components of the Dwarf Fortress LNP that can be used on any OS.  Contributions, feedback, and reuse all welcome.
 
-The goal of this project is to create a canonical common base for different versions of the Lazy Newb Pack, across whatever platform or variant a user or pack maintainer feels like.  It assumes that the pack is based on the [PyLNP launcher](http://www.bay12forums.com/smf/index.php?topic=140808) or an equivalent, and content is currently targeted at DF v0.40.22
+The goal of this project is to create a canonical common base for different versions of the Lazy Newb Pack, across whatever platform or variant a user or pack maintainer feels like.  It assumes that the pack is based on the [PyLNP launcher](http://www.bay12forums.com/smf/index.php?topic=140808) or an equivalent, and content is currently targeted at DF v0.40.23 with DFHack.
 
 It consists of alternative color schemes, standard 'newb friendly' default settings, an embark profile collection, keybindings (alternative control schemes), and miscellaneous "extras" to install.  
-
-TODO:  continue documenting sources of components.
 
 Components:
 -----------
@@ -26,8 +24,8 @@ The default profiles are sourced from [an appeal on Reddit]().  The starting sce
 
 `LNP/extras`
 ------------
-The extras folder is copied into the DF install the first time the launcher is run.  The `/data/init` section installs the default init settings and keybinds.  The `/hack/scripts` section adds some dfhack scripts by Lethosor which are not yet included in standard DFHack:  [adv-max-skills, embark-skills, load-screen, manager-quantity, settings-manager, and title-version](https://github.com/lethosor/dfhack-scripts).  We recently added `soundsense.lua` (extra announcements), `position.lua` (reports time and place, may be standard soon), and `burial.lua` by Putnam (configures all built coffins for burial).  Stocksettings are Rmblr's settings v2, [here](http://dffd.wimbli.com/file.php?id=10170) based on [these](http://redd.it/2o611s).
+The extras folder is copied into the DF install the first time the launcher is run.  The `/data/init` section installs the default init settings and keybinds.  The `/hack/scripts` section adds some dfhack scripts by Lethosor which are not yet included in standard DFHack:  [adv-max-skills, embark-skills, load-screen, manager-quantity, settings-manager, and title-version](https://github.com/lethosor/dfhack-scripts).  We recently added `soundsense.lua` (extra announcements), and `burial.lua` by Putnam (configures all built coffins for burial).  Stocksettings are Rmblr's settings v2, [here](http://dffd.wimbli.com/file.php?id=10170) based on [these](http://redd.it/2o611s).
 
 `LNP/keybinds`
 --------------
-The vanilla keybinds are copied from DF `0.40.22`.  The Classic LNP keybinds are adapted for laptop keyboards; PeridexisErrant ported the changes to a new version (from the discontinued Windows LNP).  The PeridexisErrant keybindings are additionally optimised for use with the mouse, eg with dfhack's mousequery plugin.
+The vanilla keybinds are copied from DF `0.40.23`.  The Classic LNP keybinds are adapted for laptop keyboards; PeridexisErrant ported the changes to a new version (from the discontinued Windows LNP).  The PeridexisErrant keybindings are additionally optimised for use with the mouse, eg with dfhack's mousequery plugin.
