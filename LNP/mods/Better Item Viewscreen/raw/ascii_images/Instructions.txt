@@ -1,0 +1,3 @@
+Place this folder in your Dwarf Fortress/raw and Dwarf Fortress/data/save/<saved_world>/raw folders.
+
+txt files in subfolders are used as ASCII images for items. See item_descriptions folder for syntax info.

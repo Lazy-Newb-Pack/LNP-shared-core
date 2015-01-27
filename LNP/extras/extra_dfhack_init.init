@@ -16,3 +16,6 @@ load-screen enable
 
 # add fertility indicator to nestboxes
 tweak eggs-fertile
+
+# enable improved item viewscreen
+nb_item_info ascii_item ascii_unit
