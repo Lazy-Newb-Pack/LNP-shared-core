@@ -59,6 +59,11 @@ version (from the discontinued Windows LNP).  The PeridexisErrant keybindings
 are additionally optimised for use with the mouse, eg with dfhack's mousequery 
 plugin.
 
+`LNP/mods`
+--------------
+Includes the [better item viewscreen](http://www.bay12forums.com/smf/index.php?topic=147707) raws, since they're a resource for the
+included script.
+
 `LNP/tilesets`
 --------------
 Some tilesets are from vanilla DF.  Fircy generated many more with mifki's 
