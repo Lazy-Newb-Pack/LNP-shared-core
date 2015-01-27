@@ -1,0 +1,5 @@
+A rack for the storage of military equipment,
+specifically armor. It is required by some nobles,
+and can be used to create a barracks. 
+Armor can be stored in it, but is always stored in 
+stockpiles instead
