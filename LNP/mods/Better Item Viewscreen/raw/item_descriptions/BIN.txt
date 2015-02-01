@@ -1,5 +1,0 @@
-A container for the storage of ammunition, 
-armor and weapons, bars, blocks, cloth and leather,
-coins, finished goods and gems.
-It can be used to carry multiple items to the Trade Depot at once.
-It can be made from wood or forged from metal.
