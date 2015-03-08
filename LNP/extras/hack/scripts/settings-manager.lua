@@ -1,17 +1,18 @@
 -- An in-game init file editor
---[[ By Lethosor
+--[[
 Sample usage:
     keybinding add Alt-S@title settings-manager
     keybinding add Alt-S@dwarfmode/Default settings-manager
-
-Last tested on 0.40.13-r1
 ]]
 
-VERSION = '0.5.2'
+VERSION = '0.6.0'
 
 local gui = require "gui"
 local dialog = require 'gui.dialogs'
 local widgets = require "gui.widgets"
+
+local enabler = df.global.enabler
+local gps = df.global.gps
 
 -- settings-manager display settings
 ui_settings = {
@@ -61,7 +62,7 @@ local print_modes = {
     {'STANDARD', 'STANDARD (OpenGL)'}, {'PROMPT', 'Prompt (STANDARD/2D)'},
     {'ACCUM_BUFFER', 'ACCUM_BUFFER'}, {'FRAME_BUFFER', 'FRAME_BUFFER'}, {'VBO', 'VBO'}
 }
-if dfhack.getOSType() == 'linux' then
+if dfhack.getOSType() == 'linux' or dfhack.getOSType() == 'darwin' then
     table.insert(print_modes, {'TEXT', 'TEXT (ncurses)'})
 end
 
@@ -218,8 +219,43 @@ SETTINGS = {
         {id = 'NICKNAME_DWARF', type = 'select', desc = 'Nickname behavior (fortress mode)', choices = nickname_choices},
         {id = 'NICKNAME_ADVENTURE', type = 'select', desc = 'Nickname behavior (adventure mode)', choices = nickname_choices},
         {id = 'NICKNAME_LEGENDS', type = 'select', desc = 'Nickname behavior (legends mode)', choices = nickname_choices},
+    },
+    colors = {
+        -- populated below
     }
 }
+
+COLORS = {
+    {id = 'BLACK', name = 'Black'},
+    {id = 'BLUE', name = 'Dark Blue'},
+    {id = 'GREEN', name = 'Dark Green'},
+    {id = 'CYAN', name = 'Dark Cyan'},
+    {id = 'RED', name = 'Dark Red'},
+    {id = 'MAGENTA', name = 'Dark Magenta'},
+    {id = 'BROWN', name = 'Brown'},
+    {id = 'LGRAY', name = 'Light Gray'},
+    {id = 'DGRAY', name = 'Dark Gray'},
+    {id = 'LBLUE', name = 'Light Blue'},
+    {id = 'LGREEN', name = 'Light Green'},
+    {id = 'LCYAN', name = 'Light Cyan'},
+    {id = 'LRED', name = 'Light Red'},
+    {id = 'LMAGENTA', name = 'Light Magenta'},
+    {id = 'YELLOW', name = 'Yellow'},
+    {id = 'WHITE', name = 'White'},
+}
+
+for k, v in pairs(COLORS) do
+    v.num_id = k - 1
+    for _, component in pairs({'R', 'G', 'B'}) do
+        table.insert(SETTINGS.colors, {
+            id = v.id .. '_' .. component,
+            type = 'int',
+            min = 0,
+            max = 255,
+            desc = v.name .. ' - ' .. component
+        })
+    end
+end
 
 function file_exists(path)
     local f = io.open(path, "r")
@@ -282,7 +318,7 @@ end
 function settings_manager:init()
     self:reset()
     local file_list = widgets.List{
-        choices = {"init.txt", "d_init.txt"},
+        choices = {"init.txt", "d_init.txt", "colors.txt"},
         text_pen = {fg = ui_settings.color},
         cursor_pen = {fg = ui_settings.highlightcolor},
         on_submit = self:callback("select_file"),
@@ -300,7 +336,7 @@ function settings_manager:init()
                 text = {
                     {key = 'LEAVESCREEN', text = ': Back'}
                 },
-                frame = {l = 1, t = 6},
+                frame = {l = 1, t = 4 + #file_list.choices},
             },
             widgets.Label{
                 text = 'settings-manager v' .. VERSION,
@@ -389,6 +425,10 @@ function settings_manager:select_file(index, choice)
     local res, err = settings_load()
     if not res then
         dialog.showMessage('Error loading settings', err, COLOR_LIGHTRED, self:callback('dismiss'))
+    end
+    if choice.text == 'colors.txt' then
+        color_editor():show()
+        return
     end
     self.frame_title = choice.text
     self.file = choice.text:sub(1, choice.text:find('.', 1, true) - 1)
@@ -533,6 +573,313 @@ end
 function settings_manager:save_setting(value)
     self:get_selected_setting().value = value
     self:refresh_settings_list()
+end
+
+color_editor = defclass(color_editor, gui.FramedScreen)
+color_editor.focus_path = 'settings_manager/colors'
+color_editor.ATTRS = {
+    frame_title = 'Color editor',
+    ui_colors = {
+        black = 0,
+        gray = 1,
+        white = 2,
+        r_min = 3,
+        r_max = 4,
+        g_min = 5,
+        g_max = 6,
+        -- 7 and 8 (DGRAY and LGRAY) reserved for frame border
+        b_min = 9,
+        b_max = 10,
+        preview = 11,
+    },
+    component_names = {'Red', 'Green', 'Blue'},
+    component_controls = {
+        {increase = 'CUSTOM_R', decrease = 'CUSTOM_E', reset = 'CUSTOM_ALT_R',
+         increase_fast = 'CUSTOM_SHIFT_R', decrease_fast = 'CUSTOM_SHIFT_E',},
+        {increase = 'CUSTOM_G', decrease = 'CUSTOM_F', reset = 'CUSTOM_ALT_G',
+         increase_fast = 'CUSTOM_SHIFT_G', decrease_fast = 'CUSTOM_SHIFT_F',},
+        {increase = 'CUSTOM_B', decrease = 'CUSTOM_V', reset = 'CUSTOM_ALT_B',
+         increase_fast = 'CUSTOM_SHIFT_B', decrease_fast = 'CUSTOM_SHIFT_V',},
+        reset_all = 'CUSTOM_ALT_C',
+    },
+}
+
+function color_editor:init()
+    self.sel_idx = 0
+    self.current_color = -1
+    self.drag_component = -1
+    self.real_colors = {}
+    self.old_display_frames = df.global.gps.display_frames
+    df.global.gps.display_frames = 0
+    for i, color in pairs(df.global.enabler.ccolor) do
+        self.real_colors[i] = {}
+        for component, value in pairs(color) do
+            self.real_colors[i][component] = value
+        end
+    end
+    df.global.gps.force_full_display_count = 1
+end
+
+function color_editor:set_temp_color(color, r, g, b)
+    df.global.enabler.ccolor[color][0] = r
+    df.global.enabler.ccolor[color][1] = g
+    df.global.enabler.ccolor[color][2] = b
+end
+
+function color_editor:set_ui_colors()
+    local cc = self.real_colors[self.current_color]
+    self:set_temp_color(self.ui_colors.black, 0, 0, 0)
+    self:set_temp_color(self.ui_colors.gray, 0.5, 0.5, 0.5)
+    self:set_temp_color(self.ui_colors.white, 1, 1, 1)
+    self:set_temp_color(self.ui_colors.preview, cc[0], cc[1], cc[2])
+    self:update_preview_colors()
+    df.global.gps.force_full_display_count = 1
+end
+
+function color_editor:update_preview_colors()
+    local pc = df.global.enabler.ccolor[self.ui_colors.preview]
+    self:set_temp_color(self.ui_colors.r_min, 0, pc[1], pc[2])
+    self:set_temp_color(self.ui_colors.r_max, 1, pc[1], pc[2])
+    self:set_temp_color(self.ui_colors.g_min, pc[0], 0, pc[2])
+    self:set_temp_color(self.ui_colors.g_max, pc[0], 1, pc[2])
+    self:set_temp_color(self.ui_colors.b_min, pc[0], pc[1], 0)
+    self:set_temp_color(self.ui_colors.b_max, pc[0], pc[1], 1)
+    df.global.gps.force_full_display_count = 1
+end
+
+function color_editor:reset_color(color)
+    for i = 0, 2 do
+        df.global.enabler.ccolor[color][i] = self.real_colors[color][i]
+    end
+end
+
+function color_editor:reset_colors()
+    for i = 0, 15 do self:reset_color(i) end
+end
+
+function color_editor:color_to_pos(color)
+    return ((color >= 8 and 40) or 1), ((color % 8) * 2 + 1)
+end
+
+function color_editor:pos_to_color(x, y)
+    if x == nil then x = df.global.gps.mouse_x end
+    if y == nil then y = df.global.gps.mouse_y end
+    if y >= 2 and y <= 17 then
+        if (x >= 2 and x <= 31) or (x >= 41 and x <= 70) then
+            return math.floor((y - 2) / 2) + (x >= 41 and 8 or 0)
+        end
+    end
+    return -1
+end
+
+function color_editor:full_color(color)
+    if color == nil then color = self.current_color end
+    return df.global.enabler.ccolor[color]
+end
+
+function color_editor:edit(color)
+    self.current_color = color
+    self.frame_title = (color == -1 and self.ATTRS.frame_title)
+        or "Editing color: " .. COLORS[color + 1].name
+    df.global.gps.force_full_display_count = 1
+    if color ~= -1 then
+        local cc = df.global.enabler.ccolor[self.current_color]
+        self.sel_idx = color
+        self:set_ui_colors()
+    end
+end
+
+function color_editor:save()
+    local id = COLORS[self.current_color + 1].id
+    local cc = enabler.ccolor[self.ui_colors.preview]
+    for k, v in pairs(SETTINGS.colors) do
+        if v.id == id .. '_R' then
+            v.value = math.floor(cc[0] * 255)
+        elseif v.id == id .. '_G' then
+            v.value = math.floor(cc[1] * 255)
+        elseif v.id == id .. '_B' then
+            v.value = math.floor(cc[2] * 255)
+        end
+    end
+    self.real_colors[self.current_color][0] = cc[0]
+    self.real_colors[self.current_color][1] = cc[1]
+    self.real_colors[self.current_color][2] = cc[2]
+end
+
+function color_editor:process_color_keys(keys)
+    local cc = df.global.enabler.ccolor[self.ui_colors.preview]
+    local g_controls = self.component_controls
+    for i = 0, 2 do
+        local controls = self.component_controls[i + 1]
+        if keys[controls.increase_fast] then
+            keys[controls.increase_fast] = nil
+            cc[i] = math.min(1, cc[i] + 10/255)
+            self:update_preview_colors()
+        end
+        if keys[controls.increase] then
+            keys[controls.increase] = nil
+            cc[i] = math.min(1, cc[i] + 1/255)
+            self:update_preview_colors()
+        end
+        if keys[controls.decrease] then
+            keys[controls.decrease] = nil
+            cc[i] = math.max(0, cc[i] - 1/255)
+            self:update_preview_colors()
+        end
+        if keys[controls.decrease_fast] then
+            keys[controls.decrease_fast] = nil
+            cc[i] = math.max(0, cc[i] - 10/255)
+            self:update_preview_colors()
+        end
+        if keys[controls.reset] or keys[g_controls.reset_all] then
+            keys[controls.reset] = nil
+            cc[i] = self.real_colors[self.current_color][i]
+            self:update_preview_colors()
+        end
+    end
+end
+
+function color_editor:onInput(keys)
+    if self.current_color == -1 then
+        if keys.LEAVESCREEN then
+            self:dismiss()
+        elseif keys._MOUSE_L then
+            self:edit(self:pos_to_color())
+        elseif keys.SELECT then
+            self:edit(self.sel_idx)
+        elseif keys.CURSOR_UP then
+            self.sel_idx = self.sel_idx - 1
+            if self.sel_idx < 0 then self.sel_idx = 15 end
+        elseif keys.CURSOR_DOWN then
+            self.sel_idx = self.sel_idx + 1
+            if self.sel_idx > 15 then self.sel_idx = 0 end
+        elseif keys.CURSOR_LEFT or keys.CURSOR_RIGHT then
+            self.sel_idx = (self.sel_idx + 8) % 16
+        end
+    else
+        if keys._MOUSE_L and self.drag_component == -1 and gps.mouse_y >= 8 and gps.mouse_y <= 16 then
+            self.drag_component = math.floor((gps.mouse_y - 8) / 3)
+        end
+        self:process_color_keys(keys)
+        if keys.SELECT then
+            self:save()
+            keys.LEAVESCREEN = true
+        end
+        if keys.LEAVESCREEN then
+            self:edit(-1)
+            self:reset_colors()
+        end
+    end
+end
+
+function color_editor:onRenderBody(painter)
+    if self.current_color == -1 then
+        local space = (' '):rep(30)
+        for i = 0, 15 do
+            local x, y = self:color_to_pos(i)
+            local color_name = (i == self.sel_idx and string.char(26) or ' ') ..
+                                ' ' .. COLORS[i + 1].name .. ' ' ..
+                                (i == self.sel_idx and string.char(27) or ' ')
+            painter:pen({fg = COLOR_BLACK, bg = i})
+            painter:seek(x, y):string(space)
+            painter:seek(x, y + 1):string(space)
+            painter:pen({fg = COLOR_WHITE, bg = i})
+            painter:seek(x + 1, y + 1):string(color_name)
+            painter:pen({fg = i, bg = COLOR_BLACK})
+            painter:seek(x + 1, y):string(color_name)
+        end
+    else
+        local min_x = 2
+        local max_x = df.global.gps.dimx - 4
+        local bar_min_x = min_x + 4
+        local bar_max_x = max_x - 4
+        local bar_width = bar_max_x - bar_min_x + 1
+        local mouse_x = gps.mouse_x - 1
+        local mouse_y = gps.mouse_y - 1
+        if enabler.mouse_lbut_down == 1 and self.drag_component ~= -1 then
+            local cc = enabler.ccolor[self.ui_colors.preview]
+            local old_color = cc[self.drag_component]
+            if mouse_x >= bar_max_x then
+                cc[self.drag_component] = 1
+            elseif mouse_x <= bar_min_x then
+                cc[self.drag_component] = 0
+            else
+                cc[self.drag_component] = ((mouse_x - bar_min_x) / bar_width) + (1 / (2 * bar_width))
+                if math.abs(cc[self.drag_component] - 128/255) <= 1/255 then
+                    -- snap to 128/255
+                    cc[self.drag_component] = 128/255
+                end
+            end
+            if old_color ~= cc[self.drag_component] then
+                self:update_preview_colors()
+            end
+        elseif enabler.mouse_lbut_down == 0 then
+            self.drag_component = -1
+        end
+        local space = (' '):rep(70)
+        painter:pen({fg = self.ui_colors.gray, bg = self.ui_colors.black})
+               :seek(2,  1):string(string.char(205):rep(70))
+               :seek(2,  4):string(string.char(205):rep(70))
+               :seek(1,  1):string(string.char(201))
+               :seek(72, 1):string(string.char(187))
+               :seek(1,  2):string(string.char(186))
+               :seek(72, 2):string(string.char(186))
+               :seek(1,  3):string(string.char(186))
+               :seek(72, 3):string(string.char(186))
+               :seek(1,  4):string(string.char(200))
+               :seek(72, 4):string(string.char(188))
+        painter:pen({fg = self.ui_colors.white})
+               :seek(3,  1):string('Preview:')
+        painter:pen({bg = self.ui_colors.preview})
+               :seek(2,  2):string(space)
+               :seek(2,  3):string(space)
+        for i = 1, 3 do
+            local y = 3 * i + 4
+            local bar = string.char(198) .. string.char(205):rep(bar_width - 2) .. string.char(181)
+            local controls = self.component_controls[i]
+            local value = df.global.enabler.ccolor[self.ui_colors.preview][i - 1]
+            local rgb_value = value * 255
+            local min_color_id = ({self.ui_colors.r_min, self.ui_colors.g_min, self.ui_colors.b_min})[i]
+            painter:pen({fg = self.ui_colors.white})
+                   :seek(bar_min_x + 1, y)
+                   :string(('%s <%i>'):format(self.component_names[i], rgb_value))
+                   :seek(bar_min_x + 5, y + 2)
+                   :string(('%s,%s: Decrease    %s: Reset    %s,%s: Increase'):format(
+                        dfhack.screen.getKeyDisplay(df.interface_key[controls.decrease_fast]),
+                        dfhack.screen.getKeyDisplay(df.interface_key[controls.decrease]),
+                        dfhack.screen.getKeyDisplay(df.interface_key[controls.reset]),
+                        dfhack.screen.getKeyDisplay(df.interface_key[controls.increase]),
+                        dfhack.screen.getKeyDisplay(df.interface_key[controls.increase_fast])
+                    ))
+            painter:pen({fg = self.ui_colors.gray})
+                   :seek(bar_min_x, y + 1)
+                   :string(bar)
+            -- cursor
+            painter:pen({fg = self.ui_colors.white})
+                   :seek(math.min(bar_max_x, bar_min_x + math.floor(bar_width * value)), y + 1)
+                   :string(string.char(233))
+            painter:pen({bg = min_color_id})
+                   :seek(min_x, y + 1)
+                   :string('    ')
+            painter:pen({bg = min_color_id + 1})
+                   :seek(max_x - 3, y + 1)
+                   :string('    ')
+        end
+        painter:pen({fg = self.ui_colors.white})
+               :seek(7, 5)
+               :string(dfhack.screen.getKeyDisplay(df.interface_key[self.component_controls.reset_all]) .. ': Reset')
+               :seek(1, painter.y2 - 2)
+               :string(dfhack.screen.getKeyDisplay(df.interface_key.LEAVESCREEN) .. ': Cancel')
+               :seek(painter.x2 - 15, painter.y2 - 2)
+               :string(dfhack.screen.getKeyDisplay(df.interface_key.SELECT) .. ': Save')
+    end
+end
+
+function color_editor:onDismiss()
+    self:reset_colors()
+    df.global.gps.force_full_display_count = 1
+    df.global.gps.display_frames = self.old_display_frames
+    settings_save()
 end
 
 if dfhack.gui.getCurFocus() == 'dfhack/lua/settings_manager' then
