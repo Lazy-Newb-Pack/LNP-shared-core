@@ -1,6 +1,0 @@
-A container for storing dwarves' items.
-They are required by nobles, and will increase
-the value of rooms they are placed in.
-Also required to store hospital supplies.
-They can be made from stone or metal (coffers), wood (chests),
-or textiles or leather (bags).

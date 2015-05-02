@@ -1,6 +1,0 @@
-A pallet for dwarves to sleep on. 
-It can only be made from wood. 
-It prevents the stress of sleeping on the ground,
-and can be used to designate a bedroom (used by one dwarf or couple),
-a dormitory (used by multiple dwarves), 
-or a barracks (used by a military squad for training pr sleep).

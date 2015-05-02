@@ -7,14 +7,16 @@
 --Supports user-defined custom descriptions for items and materials. They are loaded from .txt files in raw/item_description folder. Instuction file is in item_description folder.
 
 --By Raidau for Natural Balance
---v 4.2 beta
+--v 5.1 beta
 
 local standard -- stores standard material to compare with
 local args = {...}
 local dlg = require ("gui.dialogs")
+local gui=require 'gui'
+local widgets=require 'gui.widgets'
 
 local help = [[
-Natural Balance Extended Viewscreens v 4.2 beta
+Natural Balance Extended Viewscreens v 5.1 beta
 
 When activated, this script adds additional
 lines of useful information to 
@@ -71,6 +73,100 @@ end
 
 local lastframe = df.global.enabler.frame_last
 
+function MatchesAny (object, tab)
+	for k,v in pairs (tab) do
+		if object == v then return true end
+	end
+	
+	return false
+end
+
+local mats_shown_for = {0,1,4,3,5,43,44,56,57,75,24,67,85,64,26,27,59,28,29,25,38}
+
+function BuildCharMatrix (filename)
+
+		local char_matrix = {}
+		--print ("reading file",filename)
+		local format_tag
+		
+		local input = io.open(filename , r):read("*a")
+		local format_tag = string.match (input,"<FORMAT:(.+)>")
+		
+		if  format_tag ~= "NB_ASCII" then return nil end
+		
+		--print ("wrong image format") 
+		
+		for line in io.open(filename , r):lines() do
+			--print (line)
+			
+			local chartab = {}
+			for elem in string.gmatch(line, "%d+") do 
+				table.insert (chartab,tonumber(elem))
+				--print (#char_matrix,#chartab,elem)
+			end
+			
+			if #chartab>0 then
+				table.insert (char_matrix,chartab)
+			end
+			
+		 end
+		  
+		return char_matrix
+		
+	--[[	local ascii_image = "" -- convert chars into a single string, but it does not allow different colors
+		 for i =1, #char_matrix do
+			 for j =1, #char_matrix[i] do
+				ascii_image = ascii_image..string.char(char_matrix[i][j])
+			 end
+			 if char_matrix[i+1] then ascii_image = ascii_image.."\n" end
+		 end
+		print ascii_image]]
+		
+	end
+
+function ShowPicNBASCII(char_matrix)
+
+	if not char_matrix then return nil end
+	
+	local ascii_screen=defclass(tutorial_screen,gui.FramedScreen)
+
+	local draw_start_x,draw_start_y = 0,0
+	 
+	function ascii_screen:DrawLabels (char_matrix,start_t,start_l)
+
+		 for i =1, #char_matrix do
+			 for j =1, #char_matrix[i] do
+				self:addviews{	widgets.Label{text=string.char(char_matrix[i][j]),frame={t=start_t+i,l=start_l+j}} }
+			 end
+		 end
+
+	end
+
+	function ascii_screen:init(args)
+		self:addviews{
+			widgets.Label{text="Hello World",frame={t=1,l=1}},
+			widgets.Label{
+				frame = { l = 0, b = 0, w = 10 },
+				text = {
+					{ key = 'LEAVESCREEN', text = ': Close',
+					  on_activate = self:callback('dismiss') },
+					  }
+			},
+		}
+		
+		self:DrawLabels (char_matrix,draw_start_x,draw_start_y)
+		
+	end
+	
+	ascii_screen{
+	frame_width	= #char_matrix[1]+1,
+	frame_height = #char_matrix+2,
+	frame_title = "ASCII View",
+	frame_style = gui.GREY_LINE_FRAME
+	}:show()
+
+end
+
 function GetMainDir ()
 
 	local filename_root = ""
@@ -119,7 +215,6 @@ end
 
 function GetReactionClass (mat, rckey, strict) --returns reaction class string or nil if no match found
 
-	--print("checking rckey "..rckey.." for mat "..tostring(mat))
 	if not rckey then return nil end
 	
 	for k,v in pairs(mat.reaction_class) do
@@ -134,8 +229,6 @@ function GetReactionClass (mat, rckey, strict) --returns reaction class string o
 					return v.value
 				end
 			end
-			
-			
 			
 		else return nil
 		end
@@ -243,8 +336,10 @@ function GetStringListFromFile (item) -- processes all the custom desctipions
 	------------------------------------------------------
 	
 	local matinfo = dfhack.matinfo.decode(item)
-	if not matinfo then print ("nb_item_info: matinfo not found item#"..item.id) table.insert(list," ") 	table.insert(indents,0) return list,indents end
+	if not matinfo then  table.insert(list," ")	table.insert(indents,0) return list,indents end
 	
+--	print ("nb_item_info: matinfo not found item#"..item.id)
+
 	filename = filename_root..[[Material/]]
 	
 	local custom_filename = GetReactionClass(matinfo.material,"CUSTOM_DESCR=") or ""
@@ -297,8 +392,6 @@ function GetStringListFromFile (item) -- processes all the custom desctipions
 		print (filename)
 	end
 	
-	--print ("material filename:")
-	--print (filename)
 	
 	if io.open(filename , r) then 
 
@@ -388,13 +481,10 @@ function GetMatPropertiesStringList (item)
 	local list = {}
 	local indents = {}
 	
-	table.insert(list,"Temperature: "..item.temperature.whole.."U") 	table.insert(indents,0)
+	table.insert(list,"Temperature: "..item.temperature.whole.."U".." ("..math.floor((item.temperature.whole-10000)*5/9).."\248C)") 	table.insert(indents,0)
 	
-	table.insert(list,"Material properties: ") 	table.insert(indents,0)
+	table.insert(list,"Color: "..df.global.world.raws.language.colors[mat.state_color.Solid].name) 	table.insert(indents,0)
 	
-	table.insert(list,"Color: "..df.global.world.raws.language.colors[mat.state_color.Solid].name) 	table.insert(indents,3)
-	
-	table.insert(list,"Solid density: "..mat.solid_density..'g/cm^3') 	table.insert(indents,3)
 	
 	local function GetStrainDescription (number)
 		local str = "unknown"
@@ -409,20 +499,28 @@ function GetMatPropertiesStringList (item)
 		
 	end
 	
-	table.insert(list,"Shear yield: "..mat.strength.yield.SHEAR.."("..math.floor(mat.strength.yield.SHEAR/standard.strength.yield.SHEAR*100).."%)"..
-	", fr.: "..mat.strength.fracture.SHEAR.."("..math.floor(mat.strength.fracture.SHEAR/standard.strength.fracture.SHEAR*100).."%)"..
-	", el.: "..mat.strength.strain_at_yield.SHEAR..GetStrainDescription(mat.strength.strain_at_yield.SHEAR)
-	) 	table.insert(indents,3)
+	if  MatchesAny (item:getType(),mats_shown_for) then
+		
+		table.insert(list,"Material properties: ") 	table.insert(indents,0)
 	
-	table.insert(list,"Impact yield: "..mat.strength.yield.IMPACT.."("..math.floor(mat.strength.yield.IMPACT/standard.strength.yield.IMPACT*100).."%)"..
-	", fr.: "..mat.strength.fracture.IMPACT.."("..math.floor(mat.strength.fracture.IMPACT/standard.strength.fracture.IMPACT*100).."%)"..
-	", el.: "..mat.strength.strain_at_yield.IMPACT..GetStrainDescription(mat.strength.strain_at_yield.IMPACT)
-	) 	table.insert(indents,3)
+		table.insert(list,"Solid density: "..mat.solid_density..'g/cm^3') 	table.insert(indents,3)
 	
-	if mat.molar_mass > 0 then
-		table.insert(list,"Molar mass: "..mat.molar_mass) 	table.insert(indents,3)
+		table.insert(list,"Shear yield: "..mat.strength.yield.SHEAR.."("..math.floor(mat.strength.yield.SHEAR/standard.strength.yield.SHEAR*100).."%)"..
+		", fr.: "..mat.strength.fracture.SHEAR.."("..math.floor(mat.strength.fracture.SHEAR/standard.strength.fracture.SHEAR*100).."%)"..
+		", el.: "..mat.strength.strain_at_yield.SHEAR..GetStrainDescription(mat.strength.strain_at_yield.SHEAR)
+		) 	table.insert(indents,3)
+		
+		table.insert(list,"Impact yield: "..mat.strength.yield.IMPACT.."("..math.floor(mat.strength.yield.IMPACT/standard.strength.yield.IMPACT*100).."%)"..
+		", fr.: "..mat.strength.fracture.IMPACT.."("..math.floor(mat.strength.fracture.IMPACT/standard.strength.fracture.IMPACT*100).."%)"..
+		", el.: "..mat.strength.strain_at_yield.IMPACT..GetStrainDescription(mat.strength.strain_at_yield.IMPACT)
+		) 	table.insert(indents,3)
+		
+		if mat.molar_mass > 0 then
+			table.insert(list,"Molar mass: "..mat.molar_mass) 	table.insert(indents,3)
+		end
+		table.insert(list,"Maximum sharpness: "..mat.strength.max_edge.." ("..mat.strength.max_edge/standard.strength.max_edge*100 .."%)") 	table.insert(indents,3)
+		
 	end
-	table.insert(list,"Maximum sharpness: "..mat.strength.max_edge.." ("..mat.strength.max_edge/standard.strength.max_edge*100 .."%)") 	table.insert(indents,3)
 	
 	table.insert(list," ") 	table.insert(indents,0)
 
@@ -681,7 +779,7 @@ function GetFoodPropertiesStringList (item)
 	if GetReactionProduct (mat, "SOAP_MAT") then
 		local mat_type, mat_index = GetReactionProduct (mat, "SOAP_MAT")
 		
-		table.insert(list,"Used to make soap"..dfhack.matinfo.decode(mat_type, mat_index).material.state_name.Liquid)	table.insert(indents,0)
+		table.insert(list,"Used to make "..dfhack.matinfo.decode(mat_type, mat_index).material.state_name.Liquid)	table.insert(indents,0)
 	end
 	
 	if item._type == df.item_plantst then
@@ -723,6 +821,21 @@ function AddUsesString (viewscreen,inp_string,indent,reaction)
 	viewscreen.unk_34:insert('#', nil)
 	viewscreen.entry_string:insert('#', string)
 	viewscreen.entry_reaction:insert('#', reaction)
+end
+	
+function ProcessASCII (filename)
+	
+	if io.open(filename , r) then
+		local char_matrix =	BuildCharMatrix (filename) 
+	 
+		if char_matrix then
+			ShowPicNBASCII(char_matrix)
+			else
+			local inputfile = io.open(filename , r):read("*a")
+			dlg.showMessage("ASCII View",inputfile, COLOR_WHITE, nil)
+		end
+		
+	end
 end
 	
 dfhack.onStateChange.item_info = function(code)
@@ -847,11 +960,8 @@ dfhack.onStateChange.item_info = function(code)
 		end
 		
 		if dfhack.gui.getCurViewscreen()._type == df.viewscreen_textviewerst and show_ascii then
-			--print ("cur frame",df.global.enabler.frame_last)
-			--print ("last frame",lastframe)
 			
 			if df.global.enabler.frame_last-lastframe > 1000 then
-				print(tostring(unit))
 				local scr = dfhack.gui.getCurViewscreen()
 				local parent = scr.parent
 				
@@ -866,11 +976,8 @@ dfhack.onStateChange.item_info = function(code)
 						print (filename)
 					end
 					
-					if io.open(filename , r) then
-						local inputfile = io.open(filename , r):read("*a")
-						dlg.showMessage("ASCII View",inputfile, COLOR_WHITE, nil)
-					end
-				
+					ProcessASCII (filename)
+
 					lastframe = df.global.enabler.frame_last
 				
 				end
@@ -893,12 +1000,7 @@ dfhack.onStateChange.item_info = function(code)
 						print (filename)
 					end
 					
-					print (tostring (io.open(filename , r)))
-					
-					if io.open(filename , r) then
-						local inputfile = io.open(filename , r):read("*a")
-						dlg.showMessage("ASCII View",inputfile, COLOR_WHITE, nil)
-					end
+					ProcessASCII (filename)
 				
 					lastframe = df.global.enabler.frame_last
 				
