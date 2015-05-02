@@ -18,4 +18,4 @@ load-screen enable
 tweak eggs-fertile
 
 # enable improved item viewscreen
-nb_item_info ascii_item ascii_unit
+nb_item_info

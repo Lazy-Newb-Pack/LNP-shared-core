@@ -1,6 +1,0 @@
-A battle axe is an edge weapon that is essentially a sharp blade
-mounted perpendicularly on the end of a handle.
-
-Dwarves can forge battle axes out of any weapon-grade metal, 
-though those with superior edge properties are more effective.
-A battle axe may also be used as a tool for chopping down trees.
