@@ -1,8 +1,6 @@
 -- A replacement for the "load game" screen
---[[ By Lethosor
-Usage: `load-screen enable` to enable, `load-screen disable` to disable
-Last tested on 0.40.13-r1
-]]
+--@ enable = true
+
 VERSION = '0.8.2'
 
 function usage()
@@ -76,17 +74,6 @@ function string:split(sep)
     self:gsub(pattern, function(c) fields[#fields+1] = c end)
     return fields
 end
-
---CustomInputBox = defclass(CustomInputBox, dialog.InputBox)
---function CustomInputBox:init(info)
---    CustomInputBox.super.init(self, info)
---    local mw, mh = CustomInputBox.super.getWantedFrameSize(self)
---    self.frame_size = {info.frame_width or mw, info.frame_height or mh}
---end
---function CustomInputBox:getWantedFrameSize()
---    CustomInputBox.super.getWantedFrameSize(self)
---    return self.frame_size[1], self.frame_size[2]
---end
 
 load_screen = defclass(load_screen, gui.Screen)
 load_screen.focus_path = 'load_screen'
@@ -242,6 +229,10 @@ function load_screen:onRender()
     end
     paintKeyString(27, rows - 1, 'CUSTOM_T', gametypeString(self.opts.filter_mode, {NONE = "Any mode"}))
     paintKeyString(52, rows - 1, 'CUSTOM_B', self.backup_opts[self.opts.backups])
+end
+
+function load_screen:onIdle()
+    self.text_input_mode = self.search_active
 end
 
 function load_screen:onInput(keys)
@@ -463,6 +454,7 @@ function init()
         prev_focus = cur_focus
     end
 end
+
 if initialized == nil then
     if dfhack.getDFVersion():split('.')[2] ~= '40' then
         qerror('This script only supports DF 0.40.xx!')
@@ -473,6 +465,9 @@ if initialized == nil then
 end
 
 args = {...}
+if dfhack_flags and dfhack_flags.enable then
+    table.insert(args, dfhack_flags.enable_state and 'enable' or 'disable')
+end
 if #args == 1 then
     if args[1] == 'enable' then
         enabled = true
