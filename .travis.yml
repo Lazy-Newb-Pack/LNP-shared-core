@@ -1,0 +1,4 @@
+script:
+- python travis/validate-keybindings.py
+notifications:
+    email: false
