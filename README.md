@@ -1,6 +1,8 @@
 LNP-shared-core
 ===============
 
+[![Build Status](https://travis-ci.org/Lazy-Newb-Pack/LNP-shared-core.png?branch=master)](https://travis-ci.org/Lazy-Newb-Pack/LNP-shared-core)
+
 Components of the Dwarf Fortress LNP that can be used on any OS.  
 Contributions, feedback, and reuse all welcome.
 
