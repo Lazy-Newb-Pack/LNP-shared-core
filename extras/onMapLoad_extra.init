@@ -1,0 +1,14 @@
+# Each line is executed as a DFHack command when a map is loaded
+
+# Before running the commands in the launcher's DFHack tab,
+# disable persistent plugins.  That way state will match the tab.
+disable autolabor workflow
+autonestbox stop
+
+# should-be-standard bugfixes
+enable fix-unit-occupancy
+fix/blood-del enable
+repeat -time 1 -timeUnits months -command [ fix/dry-buckets ]
+repeat -time 1 -timeUnits months -command [ fix/fat-dwarves ]
+repeat -time 1 -timeUnits months -command [ fix/stuckdoors ]
+repeat -time 1 -timeUnits months -command [ fix/build-location ]
