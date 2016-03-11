@@ -67,7 +67,7 @@
 		}, 
 		"Disable Manager Quantity Limit": {
 			"enabled": false, 
-			"command": "tweak manager-quantity disable", 
+			"command": "tweak manager-quantity enable", 
 			"tooltip": "Allows setting more than 30 items to be producted at a time from the manager screen", 
 			"file": "onMapLoad"
 		}, 
@@ -80,11 +80,9 @@
 	},
 	"hideUtilityPath": true,
 	"hideUtilityExt": false,
-	"updates": {
-		"checkURL": "",
-		"versionRegex": "",
-		"downloadURL": "",
-		"packVersion": ""
+  "updates": {
+			"updateMethod": "dffd",
+			"dffdID": "11722",
+			"packVersion": "0.42.06-r03"
 	}
 }
-
