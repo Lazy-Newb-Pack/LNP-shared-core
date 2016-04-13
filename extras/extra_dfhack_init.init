@@ -10,7 +10,7 @@ keybinding add Alt-S@dwarfmode/Default settings-manager
 keybinding add Alt-Q@jobmanagement manager-quantity
 
 # enable Lethosor's scripts
-embark-tools enable sand sticky nano
+embark-tools enable sand sticky
 title-version enable
 load-screen enable
 
