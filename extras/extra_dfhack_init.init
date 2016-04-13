@@ -19,3 +19,6 @@ tweak eggs-fertile
 
 # enable improved item viewscreen
 nb_item_info
+
+# save tallow for soap industry
+ban-cooking tallow
