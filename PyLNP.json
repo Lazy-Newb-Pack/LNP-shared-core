@@ -68,7 +68,7 @@
 		"Disable Manager Quantity Limit": {
 			"enabled": false, 
 			"command": "tweak manager-quantity enable", 
-			"tooltip": "Allows setting more than 30 items to be producted at a time from the manager screen", 
+			"tooltip": "Allows setting more than 30 items to be produced at a time from the manager screen", 
 			"file": "onMapLoad"
 		}, 
 		"Automatic Job Assignments": {
