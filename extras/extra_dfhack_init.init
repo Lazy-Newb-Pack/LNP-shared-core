@@ -11,8 +11,6 @@ keybinding add Alt-Q@jobmanagement manager-quantity
 
 # enable Lethosor's scripts
 embark-tools enable sand sticky
-title-version enable
-load-screen enable
 
 # add fertility indicator to nestboxes
 tweak eggs-fertile
