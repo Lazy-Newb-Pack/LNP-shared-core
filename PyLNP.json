@@ -5,8 +5,8 @@
 		["LNP folder","LNP"],
 		["-","-"],
 		["Savegame folder","<df>/data/save"],
-		["Utilities folder","LNP/Utilities"],
-		["Graphics folder","LNP/Graphics"],
+		["Utilities folder","LNP/utilities"],
+		["Graphics folder","LNP/graphics"],
 		["Init folder","<df>/data/init"]
 	],
 	"links": [
@@ -15,7 +15,7 @@
 		["-","-"],
 		["DF Forums","http://www.bay12forums.com/smf/"],
 		["DF Wiki","http://dwarffortresswiki.org/index.php/DF2014:Quickstart_guide"],
-		["DF on Reddit",""],
+		["DF on Reddit","https://www.reddit.com/r/dwarffortress"],
 		["DF Map Archive","http://mkv25.net/dfma/index.php"],
 		["DFHack readme","https://github.com/DFHack/dfhack/blob/master/Readme.rst"],
 		["DF on TvTropes","http://tvtropes.org/pmwiki/pmwiki.php/VideoGame/DwarfFortress"],
@@ -29,18 +29,18 @@
 		["Hall of Legends","http://www.bay12forums.com/smf/index.php?topic=89305"]
 	],
 	"dfhack": {
-		"Workflow - production targets (Deprecated)": {
-			"enabled": false, 
-			"command": "enable workflow", 
-			"tooltip": "The 'workflow' plugin disables cancelling repeat jobs.\n Use 'alt-W' to set targets (eg 'if less than 100 drinks, unsuspend drink production until 200 drinks').\n Great for automating complicated industries.\n", 
-			"file": "onMapLoad"
-		}, 
 		"Extra Misc. Tweaks": {
 			"enabled": false, 
 			"command": "script extra_dfhack_init.init", 
-			"tooltip": "TWBT Multilevel, among other misc. settings and keybinds", 
+			"tooltip": "adds a few keybinds, prevents the cooking of tallow, and enables a fertile eggs indicator on nestboxes", 
 			"file": "onMapLoad"
 		}, 
+		"Enable TWBT Multilevel": {
+			"enabled": false,
+			"command": "multilevel 5",
+			"tooltip": "Enable/Disable TWBT multilevel mode",
+			"file": "onMapLoad"
+		},
 		"Other Automation plugins": {
 			"enabled": false, 
 			"command": "multicmd autonestbox start; repeat -time 7 -timeUnits days -command [ burial ] -name burial", 
