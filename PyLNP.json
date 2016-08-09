@@ -29,6 +29,12 @@
 		["Hall of Legends","http://www.bay12forums.com/smf/index.php?topic=89305"]
 	],
 	"dfhack": {
+		"Enhanced Gameplay": {
+			"enabled": false,
+			"command": "multicmd fix/merchants; fix/diplomats",
+			"file": "onMapLoad",
+			"tooltip": "Adds Human merchants (more trade deals) and Elvish diplomats (logging quotas)"
+		},	
 		"Extra Misc. Tweaks": {
 			"enabled": false, 
 			"command": "script extra_dfhack_init.init", 
@@ -77,6 +83,6 @@
   "updates": {
 			"updateMethod": "dffd",
 			"dffdID": "11722",
-			"packVersion": "0.43.03-r02"
+			"packVersion": "0.43.03-r03"
 	}
 }
