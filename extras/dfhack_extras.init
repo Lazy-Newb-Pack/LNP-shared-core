@@ -1,10 +1,10 @@
 ## Extra tools, tweaks, and UI mods - additional to standard "dfhack.init".
-## To enable this file, add "script extra_dfhack_init.init" to the default init
 
 # keybindings for Lethosor's scripts
 keybinding add Alt-S@title settings-manager
 keybinding add Alt-S@dwarfmode/Default settings-manager
 keybinding add Alt-Q@jobmanagement manager-quantity
+keybinding add Alt-W@dwarfmode/QueryBuilding/Some/Workshop/Job gui/workflow
 keybinding add Alt-W@overallstatus "gui/workflow status"
 
 # enable Lethosor's scripts
@@ -16,6 +16,7 @@ tweak eggs-fertile
 # enable improved item viewscreen
 nb_item_info
 
+# default TWBT multilevel off, can be overridden in LNP dfhack tab 
 multilevel 0
 
 # extended status screen (bedrooms page)
