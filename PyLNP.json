@@ -32,8 +32,8 @@
 		"Enhanced Gameplay": {
 			"enabled": false,
 			"command": "multicmd fix/merchants; fix/diplomats",
-			"file": "onMapLoad",
-			"tooltip": "Adds Human merchants (more trade deals) and Elvish diplomats (logging quotas)"
+      "tooltip": "Adds Human merchants (more trade deals) and Elvish diplomats (logging quotas)",
+			"file": "onMapLoad"
 		},	
 		"Don't Cook Tallow": {
 			"enabled": false, 
