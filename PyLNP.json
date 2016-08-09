@@ -35,10 +35,10 @@
 			"file": "onMapLoad",
 			"tooltip": "Adds Human merchants (more trade deals) and Elvish diplomats (logging quotas)"
 		},	
-		"Extra Misc. Tweaks": {
+		"Don't Cook Tallow": {
 			"enabled": false, 
-			"command": "script extra_dfhack_init.init", 
-			"tooltip": "adds a few keybinds, prevents the cooking of tallow, and enables a fertile eggs indicator on nestboxes", 
+			"command": "ban-cooking tallow", 
+			"tooltip": "Prevents the cooking of tallow into inedible roasts, and saves it for the soap industry", 
 			"file": "onMapLoad"
 		}, 
 		"Enable TWBT Multilevel": {
