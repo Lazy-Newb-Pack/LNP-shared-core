@@ -83,20 +83,13 @@
 			"command": "repeat -time 1 -timeUnits months -command [ fix/dead-units ]",
 			"tooltip": "Removes uninteresting dead units (slaughtered and other unnamed creatures) from the unit list.",
 			"file": "onMapLoad"
-		},
-		"Extended Item Viewscreens": {
-			"enabled": false,
-			"command": "nb_item_info",
-			"tooltip": "When activated, this script adds additional lines of useful information to item view screen every time the item is inspected.",
-			"file": "onMapLoad"
 		}
-			
 	},
 	"hideUtilityPath": true,
 	"hideUtilityExt": false,
   "updates": {
 			"updateMethod": "dffd",
 			"dffdID": "11722",
-			"packVersion": "0.43.03-r03"
+			"packVersion": "0.43.03-r02"
 	}
 }
