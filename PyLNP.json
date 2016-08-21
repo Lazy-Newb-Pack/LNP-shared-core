@@ -12,7 +12,6 @@
 	"links": [
 		["DF Homepage","http://www.bay12games.com/dwarves/"],
 		["Donate for Dwarf Fortress","http://www.bay12games.com/support.html"],
-		["This Pack's Homepage","http://www.bay12forums.com/smf/index.php?topic=156011.0"],
 		["-","-"],
 		["DF Forums","http://www.bay12forums.com/smf/"],
 		["DF Wiki","http://dwarffortresswiki.org/index.php/DF2014:Quickstart_guide"],
@@ -88,8 +87,8 @@
 	"hideUtilityPath": true,
 	"hideUtilityExt": false,
   "updates": {
-			"updateMethod": "dffd",
-			"dffdID": "11722",
-			"packVersion": "0.43.03-r02"
+			"updateMethod": "",
+			"dffdID": "",
+			"packVersion": ""
 	}
 }
