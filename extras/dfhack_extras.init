@@ -1,0 +1,7 @@
+## Extra tools, tweaks, and UI mods - additional to standard "dfhack.init".
+
+# keybindings for Lethosor's scripts
+keybinding add Alt-Q@jobmanagement manager-quantity
+
+# default TWBT multilevel off, can be overridden in LNP dfhack tab 
+multilevel 0

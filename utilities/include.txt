@@ -3,3 +3,5 @@ Any file name inside square brackets will show up in LNP's utilities list.
 
 
 [DwarfTherapist]
+[Armok Vision.x86]
+[Armok Vision.x86_64]
