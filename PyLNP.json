@@ -12,7 +12,6 @@
 	"links": [
 		["DF Homepage","http://www.bay12games.com/dwarves/"],
 		["Donate for Dwarf Fortress","http://www.bay12games.com/support.html"],
-		["This Pack's Homepage","http://www.bay12forums.com/smf/index.php?topic=156011.0"],
 		["-","-"],
 		["DF Forums","http://www.bay12forums.com/smf/"],
 		["DF Wiki","http://dwarffortresswiki.org/index.php/DF2014:Quickstart_guide"],
@@ -78,7 +77,7 @@
 			"tooltip": "The autolabor plugin automates job assignments, replacing tools such as Dwarf Therapist.",
 			"file": "onMapLoad"
 		},
-		"Autoprune Dead/Missing List": {
+    "Autoprune Dead/Missing List": {
 			"enabled": false,
 			"command": "repeat -time 1 -timeUnits months -command [ fix/dead-units ]",
 			"tooltip": "Removes uninteresting dead units (slaughtered and other unnamed creatures) from the unit list.",
@@ -87,7 +86,7 @@
 	},
 	"hideUtilityPath": true,
 	"hideUtilityExt": false,
-	"updates": {
+  "updates": {
 		"updateMethod": "",
 		"dffdID": "",
 		"packVersion": ""
