@@ -87,8 +87,8 @@
 	"hideUtilityPath": true,
 	"hideUtilityExt": false,
   "updates": {
-		"updateMethod": "",
-		"dffdID": "",
-		"packVersion": ""
+			"updateMethod": "",
+			"dffdID": "",
+			"packVersion": ""
 	}
 }
