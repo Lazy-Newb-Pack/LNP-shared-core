@@ -1,22 +1,34 @@
+WARNING: Do NOT copy over the d_init.txt from an earlier version of DF.
+Always read the file carefully, including the comments.
+
+In general, you can copy savegames and tilesets from older DF
+versions, but you should not copy anything else.  You should not, under any
+circumstances, unpack a new DF on top of an older one.
+
+
 Use these to control the automatic saving behavior in the dwarf fortress mode of game.  AUTOSAVE can be set to NONE, SEASONAL or YEARLY.  This updates your save at these intervals, so that some of your progress will be saved in case of system instability.  You can set AUTOBACKUP to YES if you want the updated save to be copied to another folder so that you'll have several copies of your world at different times.  Set AUTOSAVE_PAUSE to YES if you want the game to pause every time it autosaves.
 
-[AUTOSAVE:SEASONAL]
+[AUTOSAVE:YEARLY]
 [AUTOBACKUP:NO]
 [AUTOSAVE_PAUSE:YES]
 
 Set this to YES if you want it to save the game when you start a new fortress.  If AUTOBACKUP above is set to YES, it will also create a copy of this new save.
 
-[INITIAL_SAVE:YES]
+[INITIAL_SAVE:NO]
 
 Set this to NO to make Dwarf Fortress remain in the saved pause state when you load an active game.
 
 [PAUSE_ON_LOAD:YES]
 
-Set this to YES if you want Dwarf Fortress to show the warning window on embark as a confirmation even if there are no issues.
+Set this to YES if you want Dwarf Fortress to show the warning window for embark site selection even if there are no issues (as a way of confirming your choice).
 
 [EMBARK_WARNING_ALWAYS:YES]
 
-You can change these to ALWAYS and NO.  More restrictive world parameter settings override these.  ALWAYS lets you see the features in the Local view during embark, and NO stops you from looking for features in the site finder (though if you really want to stop the finder, it might be better for you to generate worlds that restrict the use of this feature completely, in which case you don't need to change the settings here).
+This option controls whether or not your choice to embark has a confirmation window after you have selected any dwarves and equipment.  Valid choices are ALWAYS, IF_POINTS_REMAIN and NO.
+
+[POST_PREPARE_EMBARK_CONFIRMATION:IF_POINTS_REMAIN]
+
+You can change the option below to ALWAYS and NO.  More restrictive world parameter settings override these.  ALWAYS lets you see the features in the Local view during embark, and NO stops you from looking for features in the site finder (though if you really want to stop the finder, it might be better for you to generate worlds that restrict the use of this feature completely, in which case you don't need to change the settings here).
 
 [SHOW_EMBARK_TUNNEL:ALWAYS]
 
@@ -39,7 +51,7 @@ Change this to YES to output the reasons for world map rejection into a file.
 
 Change these numbers to make the embark rectangle start at a different size.  The format is (EMBARK_RECTANGLE:<width>:<height>).  Numbers may run from 2 to 16.  The map size warning message will go by these numbers.
 
-[EMBARK_RECTANGLE:4:4]
+[EMBARK_RECTANGLE:3:3]
 
 Change these numbers to set the default weights for traffic designations.  If you make the last numbers too large, pathfinding might lag.
 The format is (PATH_COST:<high>:<normal>:<low>:<restricted>).
@@ -229,12 +241,21 @@ You can have your dwarves start/arrive without any labor types enabled here by s
 
 You can set the maximum population of your fortress here.  Keep in mind that your population must be at least 80 to get a king and 100 to obtain the current game features.  The strict cap also stops fort births.  Both caps can be violated by a few special cases, like the arrival of the monarch if you qualify.
 
-[POPULATION_CAP:200]
+[POPULATION_CAP:120]
 [STRICT_POPULATION_CAP:220]
 
-This allows you to control the number of babies+children in your fortress.  The first number is an absolute cap on the number of babies+children.  The second is a percentage of the current number of adults in your fortress (the default is the essentially meaningless 1000% here).  The lower number is used as the cap.  The cap only prevents further pregancies, so migrant children, multiple births and existing pregnancies from old saves can still push you over the cap.  Setting either number to zero will disallow pregnancies in the fortress.
+This allows you to control the number of babies+children in your fortress.  The first number is an absolute cap on the number of babies+children.  The second is a percentage of the current number of adults in your fortress (the default is the essentially meaningless 1000% here).  The lower number is used as the cap.  The cap only prevents further pregnancies, so migrant children, multiple births and existing pregnancies from old saves can still push you over the cap.  Setting either number to zero will disallow pregnancies in the fortress.
 
-[BABY_CHILD_CAP:100:1000]
+[BABY_CHILD_CAP:10:20]
+
+You can set the maximum number of visitors to your fort here.  This does not include merchants, diplomats, animals or invaders, but only those either dropping by for a temporary visit to a tavern, library or temple, or those seeking permanent employment.  Once you accept a petition from a visitor to stay at your fort, they no longer count against the cap, even if they never become a full citizen.
+
+[VISITOR_CAP:100]
+6
+You can set the maximum number of soldiers allowed to invade in serious invasions with these numbers.  This doesn't affect smaller raids or mounts, and ambushers and other special units will also ignore the cap.  Set INVADERS to NO above if you don't want invaders -- a cap of zero will be ignored here.
+
+[INVASION_SOLDIER_CAP:120]
+[INVASION_MONSTER_CAP:40]
 
 Use the specific seed cap to set the maximum number of seeds of each kind generally allowed in the fortress.  Use the fortress seed cap to control the overall number of seeds allowed.  Seeds over the global cap will be periodically removed, starting with the oldest and most worthless seeds.
 
@@ -256,7 +277,7 @@ get rid of the outside ** by setting this to NO.
 
 Set this to YES to display fluids as numbers indicating depth.
 
-[SHOW_FLOW_AMOUNTS:NO]
+[SHOW_FLOW_AMOUNTS:YES]
 
 If you'd prefer to leave the history behind every engraving for your adventurers to discover, then set this to NO.
 
@@ -285,3 +306,7 @@ Options are REPLACE_FIRST, CENTRALIZE (between first and last), REPLACE_ALL
 [NICKNAME_DWARF:REPLACE_FIRST]
 [NICKNAME_ADVENTURE:REPLACE_FIRST]
 [NICKNAME_LEGENDS:REPLACE_FIRST]
+
+Set this number to scale how often grazing animals need to eat.  Larger numbers mean less food is necessary.  Metabolism is always set according to the 3/4ths power of size.
+
+[GRAZE_COEFFICIENT:100]

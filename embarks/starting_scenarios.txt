@@ -34,7 +34,7 @@ Adapted from the mod 'Masterwork', these profiles are each a scenario - play as 
         [ITEM:14:SEEDS:NONE:PLANT_MAT:POD_SWEET:SEED]
         [ITEM:15:SEEDS:NONE:PLANT_MAT:BUSH_QUARRY:SEED]
         [ITEM:12:SEEDS:NONE:PLANT_MAT:MUSHROOM_CUP_DIMPLE:SEED]
-        [ITEM:1:WEAPON:ITEM_WEAPON_AXE_TRAINING:PLANT_MAT:TOWER_CAP:WOOD]
+        [ITEM:1:WEAPON:ITEM_WEAPON_AXE_BATTLE:INORGANIC:COPPER]
         [ITEM:13:MEAT:NONE:CREATURE_MAT:COW:MUSCLE]
         [ITEM:15:WOOD:NONE:PLANT_MAT:TOWER_CAP:WOOD]
         [PET:2:CAT:MALE:STANDARD]
@@ -42,7 +42,7 @@ Adapted from the mod 'Masterwork', these profiles are each a scenario - play as 
         [PET:1:COW:MALE:STANDARD]
         [PET:1:SHEEP:FEMALE:STANDARD]
         [PET:2:BIRD_CHICKEN:FEMALE:STANDARD]
- 
+
 [PROFILE]
         [TITLE:Miner Expedition with Supplies and Raw Mats]
         [SKILL:1:MINING:5]
@@ -62,8 +62,8 @@ Adapted from the mod 'Masterwork', these profiles are each a scenario - play as 
         [ITEM:50:SEEDS:NONE:PLANT_MAT:MUSHROOM_HELMET_PLUMP:SEED]
         [ITEM:40:PLANT:NONE:PLANT_MAT:MUSHROOM_HELMET_PLUMP:STRUCTURAL]
         [ITEM:25:WOOD:NONE:PLANT_MAT:TOWER_CAP:WOOD]
-        [ITEM:1:WEAPON:ITEM_WEAPON_AXE_TRAINING:PLANT_MAT:TOWER_CAP:WOOD]
- 
+        [ITEM:1:WEAPON:ITEM_WEAPON_AXE_BATTLE:INORGANIC:COPPER]
+
 [PROFILE]
         [TITLE:Engineers sent to build fortifications]
         [SKILL:1:MINING:5]
@@ -100,7 +100,7 @@ Adapted from the mod 'Masterwork', these profiles are each a scenario - play as 
         [ITEM:2:TRAPCOMP:ITEM_TRAPCOMP_LARGESERRATEDDISC:INORGANIC:COPPER]
         [ITEM:30:BOULDER:NONE:INORGANIC:GRANITE]
         [ITEM:2:CAGE:NONE:INORGANIC:COPPER]
- 
+
 [PROFILE]
         [TITLE:Military Squad with Doctor]
         [SKILL:1:MINING:5]
@@ -137,11 +137,11 @@ Adapted from the mod 'Masterwork', these profiles are each a scenario - play as 
         [ITEM:1:POWDER_MISC:NONE:INORGANIC:PLASTER]
         [ITEM:2:THREAD:NONE:PLANT_MAT:GRASS_TAIL_PIG:THREAD]
         [ITEM:2:CLOTH:NONE:PLANT_MAT:GRASS_TAIL_PIG:THREAD]
-        [PET:1:CAT:FEMALE:STANDARD] 
-        [PET:1:CAT:MALE:STANDARD] 
+        [PET:1:CAT:FEMALE:STANDARD]
+        [PET:1:CAT:MALE:STANDARD]
         [PET:3:DOG:MALE:TRAINED_WAR]
         [PET:1:DOG:FEMALE:STANDARD]
- 
+
 [PROFILE]
         [TITLE:Smithcaste with Anvil and Fuel]
         [SKILL:1:MINING:4]
@@ -172,9 +172,9 @@ Adapted from the mod 'Masterwork', these profiles are each a scenario - play as 
         [ITEM:80:BOULDER:NONE:INORGANIC:COAL_BITUMINOUS]
         [ITEM:1:ANVIL:NONE:INORGANIC:IRON]
         [ITEM:1:BAR:NONE:COAL:COKE]
-        [ITEM:1:WEAPON:ITEM_WEAPON_AXE_TRAINING:PLANT_MAT:TOWER_CAP:WOOD]
-        [PET:1:CAT:FEMALE:STANDARD] 
- 
+        [ITEM:1:WEAPON:ITEM_WEAPON_AXE_BATTLE:INORGANIC:COPPER]
+        [PET:1:CAT:FEMALE:STANDARD]
+
 [PROFILE]
         [TITLE:Craftsmen stranded without booze]
         [SKILL:1:MINING:5]
@@ -202,7 +202,7 @@ Adapted from the mod 'Masterwork', these profiles are each a scenario - play as 
         [ITEM:10:SEEDS:NONE:PLANT_MAT:POD_SWEET:SEED]
         [ITEM:20:PLANT:NONE:PLANT_MAT:MUSHROOM_HELMET_PLUMP:STRUCTURAL]
         [ITEM:25:MEAT:NONE:CREATURE_MAT:COW:MUSCLE]
-        [ITEM:1:WEAPON:ITEM_WEAPON_AXE_TRAINING:PLANT_MAT:TOWER_CAP:WOOD]
+        [ITEM:1:WEAPON:ITEM_WEAPON_AXE_BATTLE:INORGANIC:COPPER]
         [ITEM:20:BOULDER:NONE:INORGANIC:GRANITE]
         [ITEM:20:BOULDER:NONE:INORGANIC:MARBLE]
         [ITEM:5:CHAIN:NONE:CREATURE_MAT:SPIDER_CAVE:SILK]
@@ -212,7 +212,7 @@ Adapted from the mod 'Masterwork', these profiles are each a scenario - play as 
         [ITEM:10:CLOTH:NONE:CREATURE_MAT:SHEEP:HAIR]
         [PET:1:CAT:FEMALE:STANDARD]
         [PET:1:CAT:MALE:STANDARD]
- 
+
 [PROFILE]
         [TITLE:Lost Caravan - Trade goods but no miner]
         [SKILL:1:NEGOTIATION:5]
@@ -241,7 +241,7 @@ Adapted from the mod 'Masterwork', these profiles are each a scenario - play as 
         [ITEM:15:PLANT:NONE:PLANT_MAT:MUSHROOM_HELMET_PLUMP:STRUCTURAL]
         [ITEM:50:BOULDER:NONE:INORGANIC:GRANITE]
         [ITEM:25:DRINK:NONE:PLANT_MAT:POD_SWEET:DRINK]
-        [ITEM:1:WEAPON:ITEM_WEAPON_AXE_TRAINING:PLANT_MAT:TOWER_CAP:WOOD]
+        [ITEM:1:WEAPON:ITEM_WEAPON_AXE_BATTLE:INORGANIC:COPPER]
         [ITEM:5:CHAIN:NONE:CREATURE_MAT:SHEEP:HAIR]
         [ITEM:5:THREAD:NONE:CREATURE_MAT:SHEEP:HAIR]
         [ITEM:5:THREAD:NONE:PLANT_MAT:GRASS_TAIL_PIG:THREAD]
@@ -252,7 +252,7 @@ Adapted from the mod 'Masterwork', these profiles are each a scenario - play as 
         [ITEM:42:MEAT:NONE:CREATURE_MAT:COW:MUSCLE]
         [PET:1:CAT:FEMALE:STANDARD]
         [PET:1:CAT:MALE:STANDARD]
- 
+
 [PROFILE]
         [TITLE:Escort and 6 nobles with no skills]
         [SKILL:1:MINING:1]
@@ -291,7 +291,7 @@ Adapted from the mod 'Masterwork', these profiles are each a scenario - play as 
         [ITEM:10:SEEDS:NONE:PLANT_MAT:BUSH_QUARRY:SEED]
         [ITEM:10:SEEDS:NONE:PLANT_MAT:MUSHROOM_CUP_DIMPLE:SEED]
         [ITEM:8:TOOL:ITEM_TOOL_NEST_BOX:INORGANIC:GNEISS]
-        [ITEM:1:WEAPON:ITEM_WEAPON_AXE_TRAINING:PLANT_MAT:TOWER_CAP:WOOD]
+        [ITEM:1:WEAPON:ITEM_WEAPON_AXE_BATTLE:INORGANIC:COPPER]
         [ITEM:25:WOOD:NONE:PLANT_MAT:TOWER_CAP:WOOD]
         [PET:4:BIRD_CHICKEN:FEMALE:STANDARD]
         [PET:4:BIRD_GOOSE:FEMALE:STANDARD]
@@ -299,9 +299,9 @@ Adapted from the mod 'Masterwork', these profiles are each a scenario - play as 
         [PET:1:BIRD_GOOSE:MALE:STANDARD]
         [PET:2:DOG:FEMALE:STANDARD]
         [PET:1:DOG:MALE:STANDARD]
-        [PET:1:CAT:MALE:STANDARD]   
-        [PET:2:CAT:FEMALE:STANDARD]  
- 
+        [PET:1:CAT:MALE:STANDARD]
+        [PET:2:CAT:FEMALE:STANDARD]
+
 [PROFILE]
         [TITLE:Vagabonds (No items)]
         [SKILL:1:CARPENTRY:5]
@@ -328,3 +328,4 @@ Adapted from the mod 'Masterwork', these profiles are each a scenario - play as 
         [SKILL:7:ORGANIZATION:1]
         [SKILL:7:LEADERSHIP:3]
         [SKILL:7:MISC_WEAPON:1]
+

@@ -14,14 +14,6 @@ for filename in filenames:
     with open(os.path.join('keybinds', filename)) as f:
         contents = f.read()
         bindings = set(re.findall(r'\[BIND:([^:]+)', contents))
-        missing = all_bindings - bindings
-        extras = bindings - all_bindings
-        if len(missing):
-            success = False
-            print('%s: Missing keybindings: %s' % (filename, ', '.join(missing)))
-        if len(extras):
-            success = False
-            print('%s: Unexpected keybindings found: %s' % (filename, ', '.join(extras)))
         for b in bindings:
             index = contents.index('[BIND:' + b) + 1
             if contents.find('[BIND:', index) == contents.find('[', index) or contents.find('[', index) == -1:

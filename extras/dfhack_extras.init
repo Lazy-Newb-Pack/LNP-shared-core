@@ -3,9 +3,7 @@
 # keybindings for Lethosor's scripts
 keybinding add Alt-S@title settings-manager
 keybinding add Alt-S@dwarfmode/Default settings-manager
-keybinding add Alt-Q@jobmanagement manager-quantity
-keybinding add Alt-W@dwarfmode/QueryBuilding/Some/Workshop/Job gui/workflow
-keybinding add Alt-W@overallstatus "gui/workflow status"
+keybinding add Alt-Q@jobmanagement gui/manager-quantity
 
 # enable Lethosor's scripts
 embark-tools enable mouse sand sticky
