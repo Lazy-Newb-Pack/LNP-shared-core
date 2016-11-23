@@ -8,7 +8,4 @@ autonestbox stop
 # should-be-standard bugfixes
 enable fix-unit-occupancy
 fix/blood-del enable
-repeat -time 1 -timeUnits months -command [ fix/dry-buckets ]
-repeat -time 1 -timeUnits months -command [ fix/fat-dwarves ]
-repeat -time 1 -timeUnits months -command [ fix/stuckdoors ]
-repeat -time 1 -timeUnits months -command [ fix/build-location ]
+repeat -time 1 -timeUnits months -command [ multicmd fix/dry-buckets; fix/fat-dwarves; fix/stuckdoors; fix/build-location ]
