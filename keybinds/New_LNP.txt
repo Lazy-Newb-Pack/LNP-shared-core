@@ -1,4 +1,3 @@
-
 [BIND:FPS_UP:REPEAT_SLOW]
     [KEY:ú]
     [SYM:0:]

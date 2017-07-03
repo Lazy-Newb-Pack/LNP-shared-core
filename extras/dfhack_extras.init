@@ -1,7 +1,19 @@
 ## Extra tools, tweaks, and UI mods - additional to standard "dfhack.init".
 
 # keybindings for Lethosor's scripts
-keybinding add Alt-Q@jobmanagement manager-quantity
+keybinding add Alt-S@title settings-manager
+keybinding add Alt-S@dwarfmode/Default settings-manager
+keybinding add Alt-Q@jobmanagement gui/manager-quantity
+
+# enable Lethosor's scripts
+embark-tools enable mouse sand sticky
+
+# add fertility indicator to nestboxes
+tweak eggs-fertile
 
 # default TWBT multilevel off, can be overridden in LNP dfhack tab 
 multilevel 0
+
+# extended status screen (bedrooms page)
+enable gui/extended-status
+

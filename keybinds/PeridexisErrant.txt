@@ -1,4 +1,3 @@
-
 [BIND:SELECT_ALL:REPEAT_NOT]
     [SYM:1:Enter]
     [SYM:1:Numpad Enter]
