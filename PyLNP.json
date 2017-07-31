@@ -32,7 +32,8 @@
     ["text_prepend","<df>/gamelog.txt"],
     ["text_prepend","<df>/dfhack.history"],
     ["copy_add","<df>/data/save"],
-    ["copy_add","<df>/sounds/packs"]
+    ["copy_add","<df>/sounds/packs"],
+    ["copy_add","<df>/stocksettings"]
   ],
     "dfhack": {
         "Partial Mouse Control": {
