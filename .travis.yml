@@ -1,5 +1,0 @@
-script:
-- python travis/validate-keybindings.py
-notifications:
-    email: false
-    irc: "chat.freenode.net#lazynewbpack"
